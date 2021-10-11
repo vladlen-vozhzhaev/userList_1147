@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     UserAdapter userAdapter;
+    Button addUserBtn;
     //ArrayList<String> usersName = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +30,27 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-        Users users = new Users();
+
+        addUserBtn = findViewById(R.id.addUserBtn);
+        addUserBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, AddUser.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void recyclerViewInit(){
+        Users users = new Users(MainActivity.this);
         userAdapter = new UserAdapter(users.getUserList());
         recyclerView.setAdapter(userAdapter);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        recyclerViewInit();
     }
 
     // Класс элемента списка
